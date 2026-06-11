@@ -3,9 +3,9 @@
  * so the same build works on localhost (dev) and GitHub Pages (production).
  *
  * When deploying the SPA to GitHub Pages, set PRODUCTION_API_ORIGIN to your
- * Render.com backend URL.
+ * DigitalOcean Droplet backend URL.
  */
-const PRODUCTION_API_ORIGIN = 'https://ephemeralcryptexchat.onrender.com';
+const PRODUCTION_API_ORIGIN = 'http://157.230.177.68';
 const DEV_API_ORIGIN = 'http://localhost:5058';
 
 function resolveApiOrigin(): string {
