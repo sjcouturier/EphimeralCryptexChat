@@ -1,3 +1,5 @@
+@use '../../../../styles/neon-v005' as neon;
+
 .login {
   min-height: 100dvh;
   display: flex;
@@ -8,7 +10,7 @@
 
 .login-wrap {
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,6 +19,7 @@
 
 .login-logo-area {
   text-align: center;
+  width: 100%;
 }
 
 .login-title {
@@ -55,12 +58,9 @@
 }
 
 .login-card {
+  @include neon.neon-panel(#00f6ff, rgba(10, 0, 20, 0.84));
   width: 100%;
-  border: var(--border-purple);
-  border-radius: var(--radius-lg);
-  padding: 28px 22px;
-  background: rgba(13,0,32,0.85);
-  box-shadow: 0 0 40px rgba(138,43,226,0.12), inset 0 1px 0 rgba(138,43,226,0.1);
+  padding: 30px 24px;
 }
 
 .login-card-label {
@@ -74,14 +74,13 @@
 }
 
 .github-btn {
+  @include neon.neon-input(#00f6ff, rgba(10, 0, 20, 0.92));
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   padding: 16px;
-  border: var(--border-cyan);
-  background: transparent;
   color: var(--color-cyan);
   font-family: var(--font-display);
   font-size: 12px;
@@ -89,17 +88,26 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: var(--radius);
-  box-shadow: 0 0 14px rgba(0,246,255,0.12), inset 0 0 14px rgba(0,246,255,0.03);
-  transition: all 0.3s;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
 }
 
 .github-btn:hover {
-  background: rgba(0,246,255,0.08);
+  background-color: rgba(0,246,255,0.08);
   box-shadow: var(--glow-cyan);
+  transform: translateY(-1px);
+}
+
+.github-btn:focus-visible {
+  outline: none;
+  border-color: var(--color-magenta);
+  box-shadow: var(--glow-magenta);
 }
 
 .github-icon {
+  @include neon.icon-glow(#00f6ff);
   width: 20px;
   height: 20px;
   fill: var(--color-cyan);
@@ -123,13 +131,12 @@
 }
 
 .feature-chip {
+  @include neon.neon-list-item(#8a2be2, rgba(10, 0, 20, 0.58));
   font-family: var(--font-display);
   font-size: 8px;
   letter-spacing: 0.15em;
-  color: rgba(138,43,226,0.7);
-  border: 1px solid rgba(138,43,226,0.25);
+  color: rgba(232, 232, 255, 0.82);
   padding: 4px 10px;
-  border-radius: 2px;
   text-transform: uppercase;
 }
 
@@ -138,6 +145,13 @@
   align-items: center;
   gap: 0.6rem;
   margin-top: 0.4rem;
+}
+
+.login-links .login-sep {
+  width: auto;
+  height: auto;
+  background: none;
+  color: rgba(232, 232, 255, 0.35);
 }
 
 .login-link {

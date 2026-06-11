@@ -1,3 +1,5 @@
+@use '../../../../styles/neon-v005' as neon;
+
 .hub {
   min-height: 100dvh;
   display: flex;
@@ -10,13 +12,12 @@
 
 /* ---- Cyber header -------------------------------------------------------- */
 .cyber-header {
+  @include neon.neon-header(#00f6ff, rgba(10, 0, 20, 0.9));
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 14px 18px;
-  border-bottom: var(--border-cyan);
-  background: rgba(10,0,20,0.75);
-  backdrop-filter: blur(10px);
   flex-shrink: 0;
 }
 
@@ -29,11 +30,25 @@
   text-shadow: var(--glow-cyan);
 }
 
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-user {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--color-gray);
+  text-transform: uppercase;
+}
+
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1.5px solid var(--color-cyan);
+  border: 2px solid var(--color-cyan);
   box-shadow: var(--glow-cyan);
   background: var(--color-purple-dim);
   display: flex;
@@ -47,30 +62,32 @@
 }
 
 .logout-btn {
+  @include neon.icon-glow(#ff00c8);
   background: transparent;
-  border: 1px solid var(--color-cyan);
-  color: var(--color-cyan);
+  border: 2px solid rgba(255, 0, 200, 0.75);
+  color: var(--color-magenta);
   cursor: pointer;
   padding: 6px 8px;
   font-size: 14px;
   border-radius: 2px;
   transition: all 0.2s;
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 18px rgba(255, 0, 200, 0.24), inset 0 0 10px rgba(255, 0, 200, 0.12);
   flex-shrink: 0;
 
   &:hover {
-    background: rgba(0, 255, 255, 0.1);
-    box-shadow: 0 0 12px rgba(0, 255, 255, 0.6);
+    background: rgba(255, 0, 200, 0.12);
+    box-shadow: var(--glow-magenta);
   }
 
   &:active {
-    background: rgba(0, 255, 255, 0.2);
+    background: rgba(255, 0, 200, 0.18);
   }
 }
 
 .channels-body {
   flex: 1;
-  padding: 18px;
+  min-height: 0;
+  padding: 22px 20px 96px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -105,29 +122,32 @@
 }
 
 .channel-card {
+  @include neon.neon-list-item(#8a2be2, rgba(13, 0, 32, 0.76));
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  background: rgba(13,0,32,0.65);
-  border: var(--border-dim);
-  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .channel-card:hover {
-  border-color: rgba(0,246,255,0.3);
-  background: rgba(0,246,255,0.03);
+  transform: translateY(-1px);
+  background-color: rgba(0,246,255,0.03);
+  border-color: rgba(0,246,255,0.6);
+  box-shadow: var(--glow-cyan);
 }
 
 .channel-card.your-turn {
-  border-color: rgba(0,246,255,0.45);
-  box-shadow: 0 0 18px rgba(0,246,255,0.07);
+  @include neon.neon-list-item(#00f6ff, rgba(10, 0, 20, 0.78));
 }
 
 .channel-card.their-turn {
-  opacity: 0.65;
+  opacity: 0.82;
 }
 
 .ch-avatar {
@@ -135,7 +155,7 @@
   height: 44px;
   border-radius: 50%;
   background: var(--color-purple-dim);
-  border: 2px solid var(--color-purple);
+  border: 2px solid rgba(138, 43, 226, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,14 +208,15 @@
 .turn-badge.yours {
   color: var(--color-cyan);
   background: rgba(0,246,255,0.08);
-  border: 1px solid rgba(0,246,255,0.35);
+  border: 2px solid rgba(0,246,255,0.45);
+  box-shadow: 0 0 18px rgba(0,246,255,0.18), inset 0 0 10px rgba(0,246,255,0.08);
   animation: badgePulse 2.5s ease-in-out infinite;
 }
 
 .turn-badge.theirs {
   color: var(--color-gray);
   background: transparent;
-  border: 1px solid rgba(107,114,128,0.2);
+  border: 2px solid rgba(107,114,128,0.2);
 }
 
 /* ---- FAB button ---------------------------------------------------------- */
@@ -217,6 +238,7 @@
   cursor: pointer;
   box-shadow: var(--glow-magenta);
   transition: all 0.2s;
+  filter: var(--icon-glow-magenta);
 }
 
 .fab:hover {
@@ -238,12 +260,9 @@
 }
 
 .dialog {
+  @include neon.neon-panel(#00f6ff, rgba(10, 0, 20, 0.92));
   width: 100%;
   max-width: 380px;
-  background: var(--color-bg-card);
-  border: var(--border-cyan);
-  box-shadow: var(--glow-cyan);
-  border-radius: var(--radius-lg);
   padding: 1.6rem;
 }
 

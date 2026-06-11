@@ -1,14 +1,18 @@
+@use '../../../styles/neon-v005' as neon;
+
 .manual {
   min-height: 100dvh;
-  background: #000;
-  color: var(--color-terminal-green, #00ff66);
+  background: var(--color-bg);
+  color: var(--color-white);
   font-family: var(--font-mono);
-  padding: 1.5rem 1.2rem;
-  max-width: 700px;
+  padding: 1.5rem 1.2rem 2rem;
+  max-width: 820px;
   margin: 0 auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 
-  // CRT scanline overlay
   &::before {
     content: '';
     position: fixed;
@@ -17,8 +21,8 @@
       0deg,
       transparent,
       transparent 2px,
-      rgba(0, 0, 0, 0.05) 2px,
-      rgba(0, 0, 0, 0.05) 4px
+      rgba(0, 246, 255, 0.04) 2px,
+      rgba(0, 246, 255, 0.04) 4px
     );
     pointer-events: none;
     z-index: 1;
@@ -26,29 +30,34 @@
 }
 
 .manual__back {
-  background: transparent;
-  border: 1px solid var(--color-terminal-green, #00ff66);
-  color: var(--color-terminal-green, #00ff66);
-  font-family: var(--font-mono);
+  @include neon.neon-list-item(#00f6ff, rgba(10, 0, 20, 0.88));
+  align-self: flex-start;
+  background-color: transparent;
+  color: var(--color-cyan);
+  font-family: var(--font-display);
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   padding: 0.35rem 0.8rem;
   cursor: pointer;
-  margin-bottom: 1.5rem;
-  transition: background 0.15s;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 
   &:hover {
-    background: rgba(0, 255, 102, 0.1);
+    background-color: rgba(0, 246, 255, 0.08);
+    box-shadow: var(--glow-cyan);
   }
 }
 
 .manual__banner {
+  @include neon.neon-header(#00f6ff, rgba(10, 0, 20, 0.9));
   font-family: var(--font-mono);
   font-size: 0.8rem;
   line-height: 1.5;
   color: var(--color-cyan);
   text-shadow: var(--glow-cyan);
-  margin: 0 0 2rem;
+  margin: 0;
+  padding: 1rem 1.2rem;
   white-space: pre;
   overflow-x: auto;
 }
@@ -56,12 +65,14 @@
 .manual__sections {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.25rem;
+  padding-right: 0.35rem;
 }
 
 .manual__section {
-  border-left: 2px solid rgba(0, 255, 102, 0.3);
-  padding-left: 1rem;
+  @include neon.neon-panel(#00f6ff, rgba(10, 0, 20, 0.8));
+  padding: 1.1rem 1.2rem;
+  z-index: 2;
 }
 
 .manual__heading {
@@ -77,7 +88,7 @@
 .manual__body {
   font-size: 0.8rem;
   line-height: 1.75;
-  color: rgba(0, 255, 102, 0.85);
+  color: rgba(232, 232, 255, 0.84);
   margin: 0;
   white-space: pre-wrap;
   opacity: 0;
@@ -85,12 +96,12 @@
 }
 
 .manual__footer {
-  margin-top: 3rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0, 255, 102, 0.2);
+  @include neon.neon-input(#8a2be2, rgba(13, 0, 32, 0.8));
+  margin-top: 0.5rem;
+  padding: 1rem 1.2rem;
   font-size: 0.68rem;
   letter-spacing: 0.2em;
-  color: rgba(0, 255, 102, 0.4);
+  color: rgba(232, 232, 255, 0.48);
   text-align: center;
 }
 

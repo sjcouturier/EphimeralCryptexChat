@@ -1,12 +1,9 @@
+@use '../../../../styles/neon-v005' as neon;
+
 :host {
-  --gold-accent: #d4af37;
-  --gold-light: #e8c547;
-  --neon-green: #00ff41;
-  --neon-pink: #ff006e;
-  --neon-cyan: #00f5ff;
-  --neon-purple: #b700ff;
-  --dark-bg: #0a0a0a;
-  --dark-panel: #0f1419;
+  --neon-cyan: #00f6ff;
+  --neon-magenta: #ff00c8;
+  --neon-purple: #8a2be2;
 }
 
 .stage {
@@ -16,7 +13,7 @@
   flex-direction: column;
   max-width: 100%;
   margin: 0 auto;
-  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+  background: radial-gradient(circle at top, rgba(28, 10, 48, 0.55), transparent 44%), var(--color-bg);
 }
 
 /* CRT SCANLINES */
@@ -29,8 +26,8 @@
   height: 100%;
   background: repeating-linear-gradient(
     0deg,
-    rgba(212, 175, 55, 0.02),
-    rgba(212, 175, 55, 0.02) 1px,
+    rgba(0, 246, 255, 0.025),
+    rgba(0, 246, 255, 0.025) 1px,
     transparent 1px,
     transparent 2px
   );
@@ -45,20 +42,15 @@
   100% { opacity: 0.97; }
 }
 
-/* ---- Elegant Matrix Header ------------------------------------------------ */
 .stage__header {
+  @include neon.neon-header(#00f6ff, rgba(10, 0, 20, 0.92));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1.8rem 2rem;
-  border-bottom: 2px solid var(--gold-accent);
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
-  background: linear-gradient(135deg, rgba(15, 20, 25, 0.9) 0%, rgba(15, 20, 25, 0.95) 100%);
-  backdrop-filter: blur(10px);
+  gap: 1rem;
+  padding: 1rem 1.25rem;
   flex-shrink: 0;
   position: relative;
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(212, 175, 55, 0.15);
   z-index: 5;
 }
 
@@ -69,13 +61,8 @@
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, 
-    var(--gold-light), 
-    var(--neon-cyan) 25%, 
-    var(--neon-purple) 50%, 
-    var(--neon-pink) 75%, 
-    var(--gold-accent));
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple) 55%, var(--neon-magenta));
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.6);
   animation: rainbow-shift 4s linear infinite;
 }
 
@@ -87,20 +74,20 @@
 .stage__back {
   background: none;
   border: none;
-  color: var(--gold-accent);
+  color: var(--neon-cyan);
   font-family: var(--font-display);
   font-size: 11px;
   letter-spacing: 0.2em;
   cursor: pointer;
   text-transform: uppercase;
   font-weight: 700;
-  text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+  text-shadow: 0 0 8px rgba(0, 246, 255, 0.45);
   transition: all 0.2s ease;
 }
 
 .stage__back:hover {
-  text-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
-  color: var(--neon-cyan);
+  text-shadow: 0 0 18px rgba(0, 246, 255, 0.75);
+  color: var(--color-white);
 }
 
 .stage__contact {
@@ -113,9 +100,9 @@
 .stage__avatar {
   width: 36px;
   height: 36px;
-  border-radius: 2px;
-  border: 2px solid var(--gold-accent);
-  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  border-radius: 4px;
+  border: 2px solid var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
   object-fit: cover;
 }
 
@@ -123,7 +110,7 @@
   font-family: var(--font-display);
   font-weight: 900;
   font-size: 12px;
-  background: linear-gradient(90deg, var(--gold-light), var(--neon-cyan));
+  background: linear-gradient(90deg, var(--color-white), var(--neon-cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -134,37 +121,33 @@
 .stage__gear {
   background: none;
   border: none;
-  color: var(--gold-accent);
+  color: var(--neon-magenta);
   font-size: 1.3rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+  filter: var(--icon-glow-magenta);
 }
 
 .stage__gear:hover {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+  color: var(--color-white);
 }
 
 .stage__menu {
+  @include neon.neon-panel(#ff00c8, rgba(10, 0, 20, 0.95));
   position: absolute;
-  top: 4.8rem;
-  right: 2rem;
+  top: 4.9rem;
+  right: 1.2rem;
   z-index: 20;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, rgba(15, 20, 25, 0.95), rgba(15, 20, 25, 0.98));
-  border: 2px solid var(--gold-accent);
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.35), inset 0 0 12px rgba(212, 175, 55, 0.08);
-  border-radius: 2px;
+  min-width: 220px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 
 .stage__menu button {
   background: none;
   border: none;
-  color: var(--gold-accent);
+  color: var(--neon-magenta);
   font-family: var(--font-body);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
@@ -173,23 +156,27 @@
   cursor: pointer;
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 8px rgba(255, 0, 200, 0.3);
   transition: all 0.2s ease;
 }
 
 .stage__menu button:hover {
-  background: rgba(212, 175, 55, 0.1);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+  background: rgba(255, 0, 200, 0.1);
+  text-shadow: 0 0 14px rgba(255, 0, 200, 0.6);
 }
 
 .stage__body {
+  @include neon.neon-panel(#00f6ff, rgba(10, 0, 20, 0.42));
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem 2rem;
+  min-height: 0;
+  margin: 1rem;
+  padding: 1.5rem;
   position: relative;
   z-index: 2;
+  overflow-y: auto;
 }
 
 .stage__body app-message-bubble,
@@ -200,7 +187,7 @@
 
 .stage__placeholder {
   text-align: center;
-  color: var(--gold-accent);
+  color: var(--color-white);
   font-family: var(--font-body);
   font-size: 0.9rem;
   letter-spacing: 0.12em;
@@ -210,10 +197,11 @@
   gap: 1.5rem;
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  text-shadow: 0 0 8px rgba(0, 246, 255, 0.3);
 }
 
 .stage__await-glyph {
+  @include neon.neon-list-item(#8a2be2, rgba(13, 0, 32, 0.82));
   font-size: 88px;
   color: var(--neon-purple);
   animation: glyph-breath 3.5s ease-in-out infinite;
@@ -222,47 +210,39 @@
   justify-content: center;
   width: 88px;
   height: 88px;
-  border: 2px solid var(--neon-purple);
-  border-radius: 2px;
-  box-shadow: 0 0 25px rgba(183, 0, 255, 0.4), inset 0 0 12px rgba(183, 0, 255, 0.08);
+  filter: var(--icon-glow-purple);
 }
 
 @keyframes glyph-breath {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 0 25px rgba(183, 0, 255, 0.4), inset 0 0 12px rgba(183, 0, 255, 0.08);
+    box-shadow: 0 0 25px rgba(138, 43, 226, 0.4), inset 0 0 12px rgba(138, 43, 226, 0.08);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(183, 0, 255, 0.6), inset 0 0 20px rgba(183, 0, 255, 0.15);
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.6), inset 0 0 20px rgba(138, 43, 226, 0.15);
   }
 }
 
 .stage__status {
-  padding: 1rem 1.5rem;
-  border-top: 2px solid var(--gold-accent);
+  @include neon.neon-input(#00f6ff, rgba(10, 0, 20, 0.9));
+  margin: 0 1rem 1rem;
+  padding: 0.9rem 1.2rem;
   font-family: var(--font-body);
   font-size: 0.75rem;
   letter-spacing: 0.15em;
-  color: var(--gold-accent);
+  color: var(--neon-cyan);
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
-  background: linear-gradient(135deg, rgba(15, 20, 25, 0.8), rgba(15, 20, 25, 0.85));
-  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.1);
+  text-shadow: 0 0 8px rgba(0, 246, 255, 0.35);
   position: relative;
   z-index: 2;
 }
 
 @media (max-width: 768px) {
-  .stage {
-    --dark-bg: #0a0a0a;
-    --dark-panel: #0f1419;
-  }
-
   .stage__header {
-    padding: 1.2rem 1.5rem;
+    padding: 1rem;
     gap: 0.8rem;
   }
 
@@ -272,7 +252,7 @@
   }
 
   .stage__menu {
-    top: 3.6rem;
+    top: 4.4rem;
     right: 1.2rem;
   }
 
@@ -290,7 +270,8 @@
   }
 
   .stage__body {
-    padding: 1.5rem 1rem;
+    margin: 0.8rem;
+    padding: 1rem;
   }
 
   .stage__placeholder {
@@ -306,6 +287,7 @@
 
   .stage__status {
     font-size: 0.7rem;
+    margin: 0 0.8rem 0.8rem;
     padding: 0.8rem 1rem;
   }
 }

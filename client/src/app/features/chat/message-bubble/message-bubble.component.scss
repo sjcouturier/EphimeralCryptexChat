@@ -1,19 +1,14 @@
+@use '../../../../styles/neon-v005' as neon;
+
 :host {
-  --gold-accent: #d4af37;
-  --gold-light: #e8c547;
-  --neon-green: #00ff41;
-  --neon-pink: #ff006e;
-  --neon-cyan: #00f5ff;
-  --neon-purple: #b700ff;
+  --incoming-accent: #00f6ff;
+  --outgoing-accent: #ff00c8;
 }
 
 .bubble {
+  @include neon.neon-panel(#00f6ff, rgba(10, 0, 20, 0.8));
   position: relative;
-  border-radius: 2px;
-  padding: 2rem 1.8rem;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(0, 245, 255, 0.04));
-  backdrop-filter: blur(8px);
-  border: 2px solid;
+  padding: 1.7rem 1.45rem;
   user-select: none;
   touch-action: none;
   cursor: pointer;
@@ -37,13 +32,11 @@
 }
 
 .bubble--own {
-  border-color: var(--gold-accent);
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.3), inset 0 0 12px rgba(212, 175, 55, 0.08);
+  @include neon.neon-panel(#ff00c8, rgba(22, 0, 26, 0.84));
 }
 
 .bubble--them {
-  border-color: var(--neon-pink);
-  box-shadow: 0 0 25px rgba(255, 0, 110, 0.3), inset 0 0 12px rgba(255, 0, 110, 0.08);
+  @include neon.neon-panel(#00f6ff, rgba(10, 0, 20, 0.8));
 }
 
 .bubble__header {
@@ -59,35 +52,31 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-weight: 700;
+  color: currentColor;
 }
 
 .bubble--own .bubble__who {
-  background: linear-gradient(90deg, var(--gold-light), var(--gold-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
+  color: var(--outgoing-accent);
+  text-shadow: 0 0 10px rgba(255, 0, 200, 0.4);
 }
 
 .bubble--them .bubble__who {
-  background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
+  color: var(--incoming-accent);
+  text-shadow: 0 0 10px rgba(0, 246, 255, 0.4);
 }
 
 .bubble__badge {
   font-family: var(--font-mono);
   font-size: 0.6rem;
   letter-spacing: 0.15em;
-  color: var(--neon-purple);
-  border: 1px solid rgba(183, 0, 255, 0.5);
+  color: var(--color-purple);
+  border: 2px solid rgba(138, 43, 226, 0.45);
   border-radius: 2px;
   padding: 0.15rem 0.5rem;
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0 0 4px rgba(183, 0, 255, 0.3);
+  text-shadow: 0 0 6px rgba(138, 43, 226, 0.35);
+  box-shadow: 0 0 16px rgba(138, 43, 226, 0.2), inset 0 0 8px rgba(138, 43, 226, 0.08);
 }
 
 .bubble__text {
@@ -96,26 +85,27 @@
   font-size: 1.08rem;
   line-height: 1.9;
   word-break: break-word;
-  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-green));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
+  color: var(--color-white);
+  text-shadow: 0 0 14px rgba(232, 232, 255, 0.08);
 }
 
 .bubble__hint {
   margin-top: 0.8rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  border-top: 2px solid rgba(0, 246, 255, 0.22);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.15em;
-  color: var(--neon-purple);
+  color: var(--color-purple);
   opacity: 1;
   animation: hint-pulse-refined 1.5s ease-in-out infinite;
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0 0 8px rgba(183, 0, 255, 0.4);
+  text-shadow: 0 0 8px rgba(138, 43, 226, 0.4);
+}
+
+.bubble--own .bubble__hint {
+  border-top-color: rgba(255, 0, 200, 0.22);
 }
 
 @keyframes hint-pulse-refined {

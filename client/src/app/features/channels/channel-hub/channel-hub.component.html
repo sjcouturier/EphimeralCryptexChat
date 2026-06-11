@@ -4,8 +4,8 @@
 
   <header class="cyber-header">
     <span class="header-logo">CRYPTEX</span>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-family:var(--font-display);font-size:10px;letter-spacing:.1em;color:var(--color-gray)">{{ currentUser()?.gitHubLogin }}</span>
+    <div class="header-meta">
+      <span class="header-user">{{ currentUser()?.gitHubLogin }}</span>
       <div class="avatar" [title]="currentUser()?.gitHubLogin">
         {{ currentUser()?.gitHubLogin?.[0]?.toUpperCase() || '?' }}
       </div>
@@ -27,7 +27,7 @@
       <ul class="hub__list">
         @for (conv of conversations(); track trackById($index, conv)) {
           <li class="channel-card" [class.your-turn]="isMyTurn(conv)" [class.their-turn]="!isMyTurn(conv)" (click)="openChannel(conv)">
-            <div class="ch-avatar">{{ contactOf(conv).gitHubLogin?.[0]?.toUpperCase() || '?' }}</div>
+            <div class="ch-avatar">{{ contactOf(conv).gitHubLogin[0]?.toUpperCase() || '?' }}</div>
             <div class="ch-info">
               <div class="ch-name">{{ contactOf(conv).gitHubLogin }}</div>
               <div class="ch-meta">
