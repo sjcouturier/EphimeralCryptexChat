@@ -5,7 +5,7 @@
  * When deploying the SPA to GitHub Pages, set PRODUCTION_API_ORIGIN to your
  * Render.com backend URL.
  */
-const PRODUCTION_API_ORIGIN = 'https://ephimeralcryptexchat.onrender.com';
+const PRODUCTION_API_ORIGIN = 'https://ephemeralcryptexchat.onrender.com';
 const DEV_API_ORIGIN = 'http://localhost:5058';
 
 function resolveApiOrigin(): string {
