@@ -87,9 +87,17 @@ public class ChatHub : Hub<IChatClient>
         await _conversationService.UpdateTurnAsync(conversationId, recipientId);
 
         var group = GroupName(conversationId);
-        await Clients.OthersInGroup(group).MessageRead(messageId, conversationId);
 
+        // For self-conversations notify the full group (caller is both parties).
         var conversation = await _conversationService.GetConversationAsync(conversationId, recipientId);
+        var isSelf = conversation is not null
+                     && conversation.Initiator.Id == conversation.Responder.Id;
+
+        if (isSelf)
+            await Clients.Group(group).MessageRead(messageId, conversationId);
+        else
+            await Clients.OthersInGroup(group).MessageRead(messageId, conversationId);
+
         if (conversation is not null)
         {
             await Clients.Group(group).ConversationUpdated(conversation);

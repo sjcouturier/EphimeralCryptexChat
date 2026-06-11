@@ -78,8 +78,10 @@ public class MessageService : IMessageService
             return null;
         }
 
-        // Only the recipient (not the sender) confirms delivery.
-        if (message.SenderId == recipientId)
+        // In a normal conversation the sender cannot confirm their own delivery.
+        // In a self-conversation both roles belong to the same user, so allow it.
+        var isSelf = message.Conversation.InitiatorId == message.Conversation.ResponderId;
+        if (message.SenderId == recipientId && !isSelf)
         {
             return message.ToDto();
         }
@@ -101,8 +103,10 @@ public class MessageService : IMessageService
             return null;
         }
 
-        // The sender cannot "read" their own message into expiry.
-        if (message.SenderId == recipientId)
+        // In a normal conversation the sender cannot mark their own message as read.
+        // In a self-conversation both roles belong to the same user, so allow it.
+        var isSelf = message.Conversation.InitiatorId == message.Conversation.ResponderId;
+        if (message.SenderId == recipientId && !isSelf)
         {
             return message.ToDto();
         }
