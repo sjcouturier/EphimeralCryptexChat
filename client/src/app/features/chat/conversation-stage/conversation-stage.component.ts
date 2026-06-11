@@ -64,7 +64,13 @@ export class ConversationStageComponent implements OnInit, OnDestroy {
   private acknowledgedReadIds = new Set<number>();
 
   readonly conversation = computed<Conversation | null>(
-    () => conversations().find((c) => c.id === this.conversationId()) ?? null,
+    () => {
+      const conv = conversations().find((c) => c.id === this.conversationId()) ?? null;
+      if (conv) {
+        console.log('[Computed] conversation updated:', conv.id, 'turn:', conv.currentTurnUserId);
+      }
+      return conv;
+    },
   );
 
   readonly contact = computed<User | null>(() => {
@@ -84,17 +90,20 @@ export class ConversationStageComponent implements OnInit, OnDestroy {
   // Tracks when a self-sent message has been echoed back and should be shown as incoming.
   private readonly forcedIncoming = signal(false);
 
-  readonly isMyTurn = computed(() => this.conversation()?.currentTurnUserId === currentUser()?.id);
+  readonly isMyTurn = computed(() => {
+    const turn = this.conversation()?.currentTurnUserId === currentUser()?.id;
+    console.log('[Computed] isMyTurn updated:', turn);
+    return turn;
+  });
 
   readonly mode = computed<StageMode>(() => {
+    console.log('[Mode Computed] calculating mode, ready:', this.ready(), 'displayMessage:', !!this.displayMessage(), 'isMyTurn:', this.isMyTurn());
     if (!this.ready()) {
       return 'loading';
     }
     const msg = this.displayMessage();
     const me = currentUser()?.id;
     if (msg) {
-      // Self-conversations: once the echo arrives we force incoming mode so
-      // the message can be revealed.  Normal conversations: own messages are outgoing.
       const isOwn = msg.senderId === me && !this.forcedIncoming();
       return isOwn ? 'outgoing' : 'incoming';
     }
