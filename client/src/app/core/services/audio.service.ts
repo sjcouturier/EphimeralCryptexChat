@@ -98,7 +98,11 @@ export class AudioService {
   /** Soft neon ping with a short echo when a message arrives. */
   playIncoming(): void {
     const ctx = this.ensureContext();
-    if (!ctx) return;
+    if (!ctx) {
+      console.warn('[Audio] AudioContext not available for playIncoming');
+      return;
+    }
+    console.log('[Audio] Playing incoming sound, ctx state:', ctx.state);
     const now = ctx.currentTime;
 
     const delay = ctx.createDelay();
@@ -181,15 +185,22 @@ export class AudioService {
     if (!this.ctx) {
       const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!Ctor) {
+        console.warn('[Audio] AudioContext not available on this browser');
         return undefined;
       }
       this.ctx = new Ctor();
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.value = this.isMuted() ? 0 : 1;
       this.masterGain.connect(this.ctx.destination);
+      console.log('[Audio] AudioContext created, state:', this.ctx.state);
     }
     if (this.ctx.state === 'suspended') {
-      void this.ctx.resume();
+      console.log('[Audio] AudioContext suspended, attempting resume...');
+      void this.ctx.resume().then(() => {
+        console.log('[Audio] AudioContext resumed');
+      }).catch(err => {
+        console.error('[Audio] Failed to resume AudioContext:', err);
+      });
     }
     return this.ctx;
   }

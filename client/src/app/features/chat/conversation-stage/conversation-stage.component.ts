@@ -191,13 +191,16 @@ export class ConversationStageComponent implements OnInit, OnDestroy {
   }
 
   private async onIncoming(message: Message): Promise<void> {
+    console.log('[onIncoming] Message received:', message.id, 'from', message.senderLogin);
     const decrypted = await this.decrypt(message);
     this.forcedIncoming.set(true);
     this.displayMessage.set(decrypted);
+    console.log('[onIncoming] Playing incoming sound...');
     this.audio.playIncoming();
     this.ambient?.ripple();
     const contact = this.contact();
     if (contact && !this.isSelfConversation()) {
+      console.log('[onIncoming] Notifying about message from', contact.gitHubLogin);
       this.notifications.notifyNewMessage(contact.gitHubLogin, this.conversationId());
     }
     void this.signalr.acknowledgeDelivery(message.id, this.conversationId());
