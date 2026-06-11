@@ -42,7 +42,7 @@ jobs:
 
       - name: Build Angular app
         working-directory: ./client
-        run: npm run build -- --configuration production --base-href "/EphemeralCryptexChat/"
+        run: npm run build -- --configuration production
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
