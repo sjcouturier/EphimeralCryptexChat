@@ -3,17 +3,21 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  max-width: 640px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
+/* ---- Cyber header -------------------------------------------------------- */
 .stage__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(0, 246, 255, 0.18);
+  padding: 14px 18px;
+  border-bottom: var(--border-cyan);
+  background: rgba(10,0,20,0.75);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
 .stage__back {
@@ -21,9 +25,10 @@
   border: none;
   color: var(--color-cyan);
   font-family: var(--font-display);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
+  font-size: 9px;
+  letter-spacing: 0.15em;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .stage__contact {
@@ -36,14 +41,17 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 1px solid var(--color-magenta);
+  border: 1.5px solid var(--color-cyan);
+  box-shadow: var(--glow-cyan);
+  object-fit: cover;
 }
 
 .stage__login {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 11px;
   color: var(--color-white);
+  letter-spacing: 0.05em;
 }
 
 .stage__gear {
@@ -61,10 +69,10 @@
   z-index: 20;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-cyan);
+  background: var(--color-bg-card);
+  border: var(--border-cyan);
   box-shadow: var(--glow-cyan);
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -72,7 +80,7 @@
   background: none;
   border: none;
   color: var(--color-cyan);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-align: left;
@@ -89,7 +97,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 1.2rem;
+  padding: 28px 24px;
 }
 
 .stage__body app-message-bubble,
@@ -100,7 +108,7 @@
 .stage__placeholder {
   text-align: center;
   color: var(--color-gray);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.85rem;
   letter-spacing: 0.1em;
   display: flex;
@@ -110,15 +118,23 @@
 }
 
 .stage__await-glyph {
-  font-size: 2.4rem;
+  font-size: 88px;
   color: var(--color-purple);
-  animation: pulse-cyan 2.5s infinite;
+  animation: glyphBreath 3.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border: 2px solid var(--color-purple);
+  border-radius: 50%;
+  box-shadow: var(--glow-purple);
 }
 
 .stage__status {
   padding: 0.8rem 1rem;
   border-top: 1px solid rgba(255, 0, 200, 0.18);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.66rem;
   letter-spacing: 0.16em;
   color: var(--color-magenta);

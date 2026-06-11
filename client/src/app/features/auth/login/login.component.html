@@ -1,25 +1,39 @@
 <app-ambient-background />
 
 <main class="login">
-  <div class="login__inner">
-    <h1 class="login__title">EPHEMERAL CRYPTEX</h1>
-    <p class="login__subtitle">ENCRYPTED · EPHEMERAL · YOURS ALONE</p>
+  <div class="login-wrap">
 
-    <app-typewriter
-      class="login__boot"
-      [lines]="bootLines"
-      [speed]="45"
-      [lineDelay]="500"
-    />
-
-    <button class="cyber-btn login__cta" type="button" (click)="establishIdentity()">
-      ◢ ESTABLISH IDENTITY ◣
-    </button>
-
-    <div class="login__links">
-      <button type="button" class="login__link" (click)="openManual()">SYSTEM MANUAL</button>
-      <span class="login__sep">·</span>
-      <button type="button" class="login__link" (click)="openPlayground()">PLAYGROUND</button>
+    <div class="login-logo-area">
+      <div class="login-title">CRYPTEX</div>
+      <div class="login-subtitle">Ephemeral · Encrypted · Turn-Based</div>
+      <div class="login-tagline">Messages that vanish after you read them.</div>
     </div>
+
+    <div class="login-sep"></div>
+
+    <div class="login-card">
+      <div class="login-card-label">// Authenticate to enter</div>
+      <button class="github-btn" type="button" (click)="establishIdentity()">
+        <svg class="github-icon" viewBox="0 0 24 24">
+          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </svg>
+        AUTHENTICATE WITH GITHUB
+      </button>
+      <p class="login-fine">Your plaintext messages never reach the server.<br>Only ciphertext. Only you hold the keys.</p>
+    </div>
+
+    <div class="feature-chips">
+      <div class="feature-chip">E2E Encrypted</div>
+      <div class="feature-chip">Turn-Based</div>
+      <div class="feature-chip">Self-Destructing</div>
+      <div class="feature-chip">Zero Knowledge</div>
+    </div>
+
+    <div class="login-links">
+      <button type="button" class="login-link" (click)="openManual()">SYSTEM MANUAL</button>
+      <span class="login-sep">·</span>
+      <button type="button" class="login-link" (click)="openPlayground()">PLAYGROUND</button>
+    </div>
+
   </div>
 </main>

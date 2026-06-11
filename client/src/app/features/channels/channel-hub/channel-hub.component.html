@@ -1,15 +1,20 @@
 <app-ambient-background />
 
 <div class="hub">
-  <header class="hub__header">
-    <div class="hub__title-row">
-      <span class="hub__lock" aria-hidden="true">⬡</span>
-      <h1 class="hub__title">ACTIVE CHANNELS</h1>
+
+  <header class="cyber-header">
+    <span class="header-logo">CRYPTEX</span>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-family:var(--font-display);font-size:10px;letter-spacing:.1em;color:var(--color-gray)">{{ currentUser()?.gitHubLogin }}</span>
+      <div class="avatar" [title]="currentUser()?.gitHubLogin">
+        {{ currentUser()?.gitHubLogin?.[0]?.toUpperCase() || '?' }}
+      </div>
     </div>
-    <p class="hub__status">{{ systemStatus() }}</p>
   </header>
 
-  <main class="hub__body">
+  <main class="channels-body">
+    <div class="section-label">// Active Channels</div>
+
     @if (loading()) {
       <p class="hub__empty">SCANNING FREQUENCY...</p>
     } @else if (conversations().length === 0) {
@@ -20,31 +25,29 @@
     } @else {
       <ul class="hub__list">
         @for (conv of conversations(); track trackById($index, conv)) {
-          <li class="row" (click)="openChannel(conv)">
-            <img class="row__avatar" [src]="contactOf(conv).avatarUrl" [alt]="contactOf(conv).gitHubLogin" />
-            <div class="row__main">
-              <span class="row__login">{{ contactOf(conv).gitHubLogin }}</span>
-              <div class="row__meta">
+          <li class="channel-card" [class.your-turn]="isMyTurn(conv)" [class.their-turn]="!isMyTurn(conv)" (click)="openChannel(conv)">
+            <div class="ch-avatar">{{ contactOf(conv).gitHubLogin?.[0]?.toUpperCase() || '?' }}</div>
+            <div class="ch-info">
+              <div class="ch-name">{{ contactOf(conv).gitHubLogin }}</div>
+              <div class="ch-meta">
                 @if (isMyTurn(conv)) {
-                  <span class="badge badge--turn">⚡ YOUR TURN</span>
+                  <span>Transmission received · {{ relativeTime(conv.lastActivityAt) }}</span>
                 } @else {
-                  <span class="badge badge--await">⏳ AWAITING...</span>
-                }
-                @if (isOnline(conv)) {
-                  <span class="badge badge--online">● ONLINE</span>
+                  <span>Awaiting their reply · {{ relativeTime(conv.lastActivityAt) }}</span>
                 }
               </div>
             </div>
-            <span class="row__time">{{ relativeTime(conv.lastActivityAt) }}</span>
+            <div class="turn-badge" [class.yours]="isMyTurn(conv)" [class.theirs]="!isMyTurn(conv)">
+              {{ isMyTurn(conv) ? 'Your Turn' : 'Their Turn' }}
+            </div>
           </li>
         }
       </ul>
     }
   </main>
 
-  <footer class="hub__footer">
-    <button class="cyber-btn" type="button" (click)="openDialog()">+ NEW CHANNEL</button>
-  </footer>
+  <button class="fab" (click)="openDialog()" title="New channel">+</button>
+
 </div>
 
 @if (dialogOpen()) {

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EphemeralCryptexChat — Design Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════
+       DESIGN TOKENS — TWEAK THESE TO CHANGE THE WHOLE LOOK
+       ═══════════════════════════════════════════════════════════════════ */
+    :root {
+      /* --- Colours --- */
+      --color-bg:           #0A0014;   /* main background                 */
+      --color-bg-card:      #0D0020;   /* card / panel background         */
+      --color-bg-input:     #110025;   /* textarea / input background     */
+      --color-cyan:         #00F6FF;   /* primary accent (reveal, badges) */
+      --color-magenta:      #FF00C8;   /* secondary accent (scramble, FAB)*/
+      --color-purple:       #8A2BE2;   /* tertiary (waiting, manual)      */
+      --color-purple-dim:   #2A0D4E;   /* dark purple fill                */
+      --color-white:        #E8E8FF;   /* body text                       */
+      --color-gray:         #6B7280;   /* muted / secondary text          */
+      --color-gray-dim:     #1C0A30;   /* subtle section dividers         */
+      --color-success:      #00FF88;   /* (reserved for future use)       */
+
+      /* --- Glow shadows --- */
+      --glow-cyan:    0 0 8px #00F6FF, 0 0 24px rgba(0,246,255,0.35);
+      --glow-magenta: 0 0 8px #FF00C8, 0 0 24px rgba(255,0,200,0.35);
+      --glow-purple:  0 0 8px #8A2BE2, 0 0 24px rgba(138,43,226,0.35);
+
+      /* --- Typography --- */
+      --font-display: 'Orbitron', monospace;
+      --font-body:    'Rajdhani', sans-serif;
+
+      /* --- Borders --- */
+      --border-cyan:    1px solid rgba(0,246,255,0.35);
+      --border-magenta: 1px solid rgba(255,0,200,0.35);
+      --border-purple:  1px solid rgba(138,43,226,0.35);
+      --border-dim:     1px solid rgba(138,43,226,0.15);
+
+      /* --- Shape --- */
+      --radius:    4px;
+      --radius-lg: 8px;
+      --radius-xl: 14px;
+
+      /* --- Phone frame width (mockup only) --- */
+      --phone-width: 390px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #07000F;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MOCKUP CHROME (screen picker + phone frame)
+       ═══════════════════════════════════════════════════════════════════ */
+    .mockup-topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: rgba(7,0,15,0.97);
+      border-bottom: 1px solid rgba(138,43,226,0.4);
+      padding: 8px 16px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .mockup-label {
+      font-family: var(--font-display);
+      font-size: 8px;
+      letter-spacing: 0.25em;
+      color: rgba(138,43,226,0.6);
+      text-transform: uppercase;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+    .screen-btn {
+      font-family: var(--font-display);
+      font-size: 8px;
+      padding: 4px 10px;
+      border: 1px solid rgba(138,43,226,0.3);
+      background: transparent;
+      color: var(--color-gray);
+      cursor: pointer;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .screen-btn:hover { border-color: var(--color-cyan); color: var(--color-cyan); }
+    .screen-btn.active {
+      border-color: var(--color-cyan);
+      color: var(--color-cyan);
+      box-shadow: var(--glow-cyan);
+      background: rgba(0,246,255,0.06);
+    }
+
+    /* Phone frame wrapper */
+    .phone-frame-wrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 52px;
+      padding-bottom: 32px;
+      min-height: 100vh;
+    }
+    .phone-frame {
+      width: var(--phone-width);
+      min-height: 844px;
+      background: var(--color-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(138,43,226,0.4);
+      box-shadow:
+        0 0 0 6px rgba(10,0,20,0.95),
+        0 0 40px rgba(138,43,226,0.2),
+        0 0 80px rgba(0,246,255,0.06);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* CRT scanlines overlay */
+    .phone-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.04) 3px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 500;
+      border-radius: var(--radius-xl);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREENS
+       ═══════════════════════════════════════════════════════════════════ */
+    .screen { display: none; flex: 1; flex-direction: column; min-height: 844px; }
+    .screen.active { display: flex; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       AMBIENT BACKGROUND GRID
+       ═══════════════════════════════════════════════════════════════════ */
+    .ambient-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+    }
+    .ambient-bg::before {
+      content: '';
+      position: absolute;
+      inset: -40px;
+      background-image:
+        linear-gradient(rgba(0,246,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,246,255,0.025) 1px, transparent 1px);
+      background-size: 36px 36px;
+      animation: gridDrift 24s linear infinite;
+    }
+    .ambient-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 60%, rgba(138,43,226,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(0,246,255,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 55% 85%, rgba(255,0,200,0.06) 0%, transparent 50%);
+    }
+    @keyframes gridDrift {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(36px, 36px); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SHARED COMPONENTS
+       ═══════════════════════════════════════════════════════════════════ */
+
+    /* --- Screen content wrapper (above ambient) --- */
+    .sc { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+
+    /* --- Cyber header --- */
+    .cyber-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: var(--border-cyan);
+      background: rgba(10,0,20,0.75);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+    .header-logo {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.35em;
+      color: var(--color-cyan);
+      text-shadow: var(--glow-cyan);
+    }
+    .header-back-btn {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--color-cyan);
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+    .header-partner {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--color-white);
+    }
+    .avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--color-cyan);
+      box-shadow: var(--glow-cyan);
+      background: var(--color-purple-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-cyan);
+      flex-shrink: 0;
+    }
+
+    /* --- Buttons --- */
+    .btn {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      border-radius: var(--radius);
+      padding: 12px 22px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .btn-cyan {
+      color: var(--color-cyan);
+      background: transparent;
+      border: var(--border-cyan);
+      box-shadow: 0 0 12px rgba(0,246,255,0.15), inset 0 0 10px rgba(0,246,255,0.04);
+    }
+    .btn-cyan:hover {
+      background: rgba(0,246,255,0.09);
+      box-shadow: var(--glow-cyan), inset 0 0 16px rgba(0,246,255,0.08);
+    }
+    .btn-magenta {
+      color: var(--color-magenta);
+      background: transparent;
+      border: var(--border-magenta);
+      box-shadow: 0 0 12px rgba(255,0,200,0.15), inset 0 0 10px rgba(255,0,200,0.04);
+    }
+    .btn-ghost {
+      color: var(--color-gray);
+      background: transparent;
+      border: 1px solid rgba(107,114,128,0.25);
+    }
+
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 1 — LOGIN
+       ═══════════════════════════════════════════════════════════════════ */
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px;
+      gap: 28px;
+    }
+    .login-logo-area { text-align: center; }
+    .login-title {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: 0.45em;
+      color: var(--color-cyan);
+      text-shadow: var(--glow-cyan);
+      animation: titlePulse 4s ease-in-out infinite;
+    }
+    @keyframes titlePulse {
+      0%,100% { text-shadow: 0 0 10px #00F6FF, 0 0 28px rgba(0,246,255,0.4); }
+      50%     { text-shadow: 0 0 20px #00F6FF, 0 0 55px rgba(0,246,255,0.6), 0 0 90px rgba(0,246,255,0.15); }
+    }
+    .login-subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--color-magenta);
+      text-transform: uppercase;
+      margin-top: 6px;
+      text-shadow: 0 0 8px rgba(255,0,200,0.5);
+    }
+    .login-tagline {
+      font-size: 13px;
+      color: rgba(232,232,255,0.35);
+      letter-spacing: 0.06em;
+      margin-top: 6px;
+    }
+    .login-sep {
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-purple), transparent);
+    }
+    .login-card {
+      width: 100%;
+      border: var(--border-purple);
+      border-radius: var(--radius-lg);
+      padding: 28px 22px;
+      background: rgba(13,0,32,0.85);
+      box-shadow: 0 0 40px rgba(138,43,226,0.12), inset 0 1px 0 rgba(138,43,226,0.1);
+    }
+    .login-card-label {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--color-gray);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .github-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px;
+      border: var(--border-cyan);
+      background: transparent;
+      color: var(--color-cyan);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: var(--radius);
+      box-shadow: 0 0 14px rgba(0,246,255,0.12), inset 0 0 14px rgba(0,246,255,0.03);
+      transition: all 0.3s;
+    }
+    .github-btn:hover {
+      background: rgba(0,246,255,0.08);
+      box-shadow: var(--glow-cyan);
+    }
+    .github-icon { width: 20px; height: 20px; fill: var(--color-cyan); flex-shrink: 0; }
+    .login-fine {
+      font-size: 11px;
+      color: rgba(232,232,255,0.22);
+      text-align: center;
+      margin-top: 14px;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+    .feature-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .feature-chip {
+      font-family: var(--font-display);
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      color: rgba(138,43,226,0.7);
+      border: 1px solid rgba(138,43,226,0.25);
+      padding: 4px 10px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 2 — CHANNELS HUB
+       ═══════════════════════════════════════════════════════════════════ */
+    .channels-body {
+      flex: 1;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+    .section-label {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--color-gray);
+      text-transform: uppercase;
+      padding-left: 2px;
+    }
+    .channel-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(13,0,32,0.65);
+      border: var(--border-dim);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .channel-card:hover { border-color: rgba(0,246,255,0.3); background: rgba(0,246,255,0.03); }
+    .channel-card.your-turn {
+      border-color: rgba(0,246,255,0.45);
+      box-shadow: 0 0 18px rgba(0,246,255,0.07);
+    }
+    .channel-card.their-turn { opacity: 0.65; }
+    .ch-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--color-purple-dim);
+      border: 2px solid var(--color-purple);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-purple);
+      flex-shrink: 0;
+    }
+    .channel-card.your-turn .ch-avatar {
+      border-color: var(--color-cyan);
+      color: var(--color-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+    .ch-info { flex: 1; min-width: 0; }
+    .ch-name {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-white);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ch-meta {
+      font-size: 12px;
+      color: var(--color-gray);
+      margin-top: 2px;
+    }
+    .turn-badge {
+      font-family: var(--font-display);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      padding: 4px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .turn-badge.yours {
+      color: var(--color-cyan);
+      background: rgba(0,246,255,0.08);
+      border: 1px solid rgba(0,246,255,0.35);
+      animation: badgePulse 2.5s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 6px rgba(0,246,255,0.15); }
+      50%     { box-shadow: 0 0 14px rgba(0,246,255,0.35), 0 0 26px rgba(0,246,255,0.1); }
+    }
+    .turn-badge.theirs {
+      color: var(--color-gray);
+      background: transparent;
+      border: 1px solid rgba(107,114,128,0.2);
+    }
+    .fab {
+      position: absolute;
+      bottom: 28px;
+      right: 22px;
+      z-index: 10;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: rgba(10,0,20,0.95);
+      border: 2px solid var(--color-magenta);
+      color: var(--color-magenta);
+      font-size: 24px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--glow-magenta);
+      transition: all 0.2s;
+    }
+    .fab:hover { background: rgba(255,0,200,0.1); transform: scale(1.08); }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 3 — INCOMING (SCRAMBLED BUBBLE)
+       ═══════════════════════════════════════════════════════════════════ */
+    .chat-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 24px;
+      gap: 20px;
+    }
+    .stage-label {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+    .stage-label.magenta { color: var(--color-magenta); text-shadow: 0 0 8px rgba(255,0,200,0.45); }
+    .stage-label.cyan    { color: var(--color-cyan);    text-shadow: 0 0 8px rgba(0,246,255,0.45); }
+    .stage-label.purple  { color: var(--color-purple);  text-shadow: 0 0 8px rgba(138,43,226,0.45); }
+
+    .sender-meta { font-size: 12px; color: var(--color-gray); }
+    .sender-meta .hl { color: var(--color-cyan); }
+
+    /* Scramble bubble */
+    .scramble-bubble {
+      width: 100%;
+      border: var(--border-magenta);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      background: rgba(255,0,200,0.03);
+      box-shadow: 0 0 28px rgba(255,0,200,0.09), inset 0 0 16px rgba(255,0,200,0.03);
+      text-align: center;
+    }
+    .scramble-text {
+      font-family: monospace;
+      font-size: 17px;
+      line-height: 1.85;
+      letter-spacing: 0.08em;
+      color: var(--color-magenta);
+      text-shadow: 0 0 5px rgba(255,0,200,0.55);
+      word-break: break-all;
+    }
+    .sc-char { display: inline-block; }
+    .sc-char.flicker { animation: scFlicker 0.12s steps(2) infinite; }
+    .sc-char.cyan-flash { color: var(--color-cyan); }
+    @keyframes scFlicker {
+      0%   { opacity: 1;   transform: translateY(0);    }
+      50%  { opacity: 0.6; transform: translateY(-1px); }
+      100% { opacity: 1;   transform: translateY(1px);  }
+    }
+
+    .hold-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--color-cyan);
+      padding: 10px 22px;
+      border: var(--border-cyan);
+      border-radius: 100px;
+      box-shadow: 0 0 12px rgba(0,246,255,0.1);
+      animation: holdPulse 2.2s ease-in-out infinite;
+      cursor: pointer;
+    }
+    @keyframes holdPulse {
+      0%,100% { box-shadow: 0 0 10px rgba(0,246,255,0.1); }
+      50%     { box-shadow: 0 0 22px rgba(0,246,255,0.28), 0 0 40px rgba(0,246,255,0.08); }
+    }
+    .hold-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-cyan);
+      animation: dotBlink 1.1s ease-in-out infinite;
+    }
+    @keyframes dotBlink { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+    .hint-text {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: rgba(232,232,255,0.22);
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 4 — REVEALING
+       ═══════════════════════════════════════════════════════════════════ */
+    .reveal-bubble {
+      width: 100%;
+      border: var(--border-cyan);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      background: rgba(0,246,255,0.03);
+      box-shadow: 0 0 36px rgba(0,246,255,0.13), inset 0 0 18px rgba(0,246,255,0.04);
+    }
+    .reveal-text {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.75;
+      color: var(--color-white);
+      word-break: break-word;
+    }
+    .rv-char { display: inline-block; }
+    .rv-char.locked {
+      color: var(--color-cyan);
+      text-shadow: 0 0 10px rgba(0,246,255,0.9);
+      animation: charLockIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes charLockIn {
+      0%   { transform: scale(1.5) translateY(-3px); color: var(--color-cyan); }
+      100% { transform: scale(1)   translateY(0);    color: var(--color-white); }
+    }
+    .decrypt-bar-wrap {
+      margin-top: 16px;
+      height: 2px;
+      background: rgba(0,246,255,0.08);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .decrypt-bar {
+      height: 100%;
+      width: 58%;
+      background: linear-gradient(90deg, var(--color-purple), var(--color-cyan));
+      box-shadow: 0 0 8px var(--color-cyan);
+    }
+    .decrypt-status-text {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--color-cyan);
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 5 — COMPOSE
+       ═══════════════════════════════════════════════════════════════════ */
+    .compose-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 16px;
+    }
+    .compose-heading { font-family: var(--font-display); font-size: 10px; letter-spacing: 0.25em; color: var(--color-cyan); text-transform: uppercase; }
+    .compose-sub     { font-size: 12px; color: var(--color-gray); margin-top: 3px; }
+    .replied-banner {
+      background: rgba(0,246,255,0.04);
+      border: var(--border-cyan);
+      border-radius: var(--radius);
+      padding: 11px 14px;
+    }
+    .replied-label {
+      font-family: var(--font-display);
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      color: rgba(0,246,255,0.6);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .replied-quote {
+      font-size: 13px;
+      color: rgba(232,232,255,0.45);
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .compose-field {
+      flex: 1;
+      min-height: 140px;
+      background: var(--color-bg-input);
+      border: var(--border-cyan);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      resize: none;
+      outline: none;
+      caret-color: var(--color-cyan);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-shadow: inset 0 0 14px rgba(0,246,255,0.04);
+    }
+    .compose-field:focus {
+      border-color: var(--color-cyan);
+      box-shadow: 0 0 18px rgba(0,246,255,0.1), inset 0 0 12px rgba(0,246,255,0.05);
+    }
+    .compose-field::placeholder { color: rgba(232,232,255,0.18); }
+    .compose-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .char-count {
+      font-family: var(--font-display);
+      font-size: 9px;
+      color: var(--color-gray);
+      letter-spacing: 0.1em;
+    }
+    .compose-actions { display: flex; gap: 8px; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 6 — AWAITING REPLY
+       ═══════════════════════════════════════════════════════════════════ */
+    .awaiting-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 24px;
+      gap: 24px;
+      text-align: center;
+    }
+    .awaiting-glyph {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      border: 2px solid var(--color-purple);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      color: var(--color-purple);
+      box-shadow: var(--glow-purple);
+      animation: glyphBreath 3.5s ease-in-out infinite;
+    }
+    @keyframes glyphBreath {
+      0%,100% { box-shadow: var(--glow-purple); }
+      50%     { box-shadow: 0 0 28px rgba(138,43,226,0.55), 0 0 55px rgba(138,43,226,0.18); }
+    }
+    .awaiting-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--color-purple);
+      text-shadow: var(--glow-purple);
+      text-transform: uppercase;
+    }
+    .awaiting-sub {
+      font-size: 14px;
+      color: var(--color-gray);
+      max-width: 260px;
+      line-height: 1.6;
+    }
+    .ciphertext-preview {
+      width: 100%;
+      border: 1px solid rgba(138,43,226,0.22);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      background: rgba(138,43,226,0.04);
+    }
+    .cipher-label {
+      font-family: var(--font-display);
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      color: rgba(138,43,226,0.5);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .cipher-text {
+      font-family: monospace;
+      font-size: 12px;
+      color: rgba(138,43,226,0.45);
+      word-break: break-all;
+      line-height: 1.6;
+    }
+    .notify-hint {
+      font-family: var(--font-display);
+      font-size: 9px;
+      color: rgba(232,232,255,0.18);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCREEN 7 — SYSTEM MANUAL
+       ═══════════════════════════════════════════════════════════════════ */
+    .manual-body {
+      flex: 1;
+      padding: 22px 20px 40px;
+      overflow-y: auto;
+    }
+    .manual-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      color: var(--color-cyan);
+      text-shadow: var(--glow-cyan);
+      text-transform: uppercase;
+    }
+    .manual-ver {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: rgba(107,114,128,0.7);
+      text-transform: uppercase;
+      margin-top: 4px;
+      margin-bottom: 28px;
+    }
+    .man-section { margin-bottom: 28px; }
+    .man-section-title {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--color-magenta);
+      text-transform: uppercase;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,0,200,0.18);
+      margin-bottom: 14px;
+    }
+    .man-step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-cyan);
+      min-width: 22px;
+      padding-top: 1px;
+    }
+    .step-text {
+      font-size: 14px;
+      color: rgba(232,232,255,0.75);
+      line-height: 1.6;
+    }
+    .step-text code {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--color-cyan);
+      background: rgba(0,246,255,0.05);
+      border: 1px solid rgba(0,246,255,0.18);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+    .man-callout {
+      background: rgba(138,43,226,0.07);
+      border: var(--border-purple);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: rgba(232,232,255,0.65);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .man-callout strong {
+      font-family: var(--font-display);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--color-purple);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── MOCKUP NAVIGATION ───────────────────────────────────────────── -->
+  <nav class="mockup-topbar">
+    <span class="mockup-label">🎨 Screens:</span>
+    <button class="screen-btn active"  onclick="show('login')">Login</button>
+    <button class="screen-btn"         onclick="show('channels')">Channels</button>
+    <button class="screen-btn"         onclick="show('incoming')">Incoming</button>
+    <button class="screen-btn"         onclick="show('revealing')">Revealing</button>
+    <button class="screen-btn"         onclick="show('compose')">Compose</button>
+    <button class="screen-btn"         onclick="show('awaiting')">Awaiting</button>
+    <button class="screen-btn"         onclick="show('manual')">Manual</button>
+  </nav>
+
+  <!-- ── PHONE FRAME ────────────────────────────────────────────────── -->
+  <div class="phone-frame-wrap">
+    <div class="phone-frame">
+
+      <!-- Ambient grid (shared; screens appear on top) -->
+      <div class="ambient-bg"></div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 1 — LOGIN
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-login" class="screen active">
+        <div class="sc">
+          <div class="login-wrap">
+
+            <div class="login-logo-area">
+              <div class="login-title">CRYPTEX</div>
+              <div class="login-subtitle">Ephemeral · Encrypted · Turn-Based</div>
+              <div class="login-tagline">Messages that vanish after you read them.</div>
+            </div>
+
+            <div class="login-sep"></div>
+
+            <div class="login-card">
+              <div class="login-card-label">// Authenticate to enter</div>
+              <button class="github-btn">
+                <svg class="github-icon" viewBox="0 0 24 24">
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+                AUTHENTICATE WITH GITHUB
+              </button>
+              <p class="login-fine">Your plaintext messages never reach the server.<br>Only ciphertext. Only you hold the keys.</p>
+            </div>
+
+            <div class="feature-chips">
+              <div class="feature-chip">E2E Encrypted</div>
+              <div class="feature-chip">Turn-Based</div>
+              <div class="feature-chip">Self-Destructing</div>
+              <div class="feature-chip">Zero Knowledge</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 2 — CHANNELS HUB
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-channels" class="screen">
+        <div class="sc">
+
+          <header class="cyber-header">
+            <span class="header-logo">CRYPTEX</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-family:var(--font-display);font-size:10px;letter-spacing:.1em;color:var(--color-gray)">sjcouturier</span>
+              <div class="avatar">S</div>
+            </div>
+          </header>
+
+          <div class="channels-body">
+            <div class="section-label">// Active Channels</div>
+
+            <!-- Your-turn channel -->
+            <div class="channel-card your-turn" onclick="show('incoming')">
+              <div class="ch-avatar">G</div>
+              <div class="ch-info">
+                <div class="ch-name">ghost_signal</div>
+                <div class="ch-meta">Transmission received · 2 min ago</div>
+              </div>
+              <div class="turn-badge yours">Your Turn</div>
+            </div>
+
+            <!-- Their-turn channels -->
+            <div class="channel-card their-turn">
+              <div class="ch-avatar" style="border-color:var(--color-gray);color:var(--color-gray)">N</div>
+              <div class="ch-info">
+                <div class="ch-name">neon_phantom</div>
+                <div class="ch-meta">Awaiting their reply · 4h ago</div>
+              </div>
+              <div class="turn-badge theirs">Their Turn</div>
+            </div>
+
+            <div class="channel-card their-turn">
+              <div class="ch-avatar" style="border-color:var(--color-gray);color:var(--color-gray)">V</div>
+              <div class="ch-info">
+                <div class="ch-name">void_walker</div>
+                <div class="ch-meta">Awaiting their reply · yesterday</div>
+              </div>
+              <div class="turn-badge theirs">Their Turn</div>
+            </div>
+
+            <!-- New channel card -->
+            <div class="channel-card" style="border-color:rgba(255,0,200,0.25)">
+              <div class="ch-avatar" style="border-color:var(--color-magenta);color:var(--color-magenta);box-shadow:var(--glow-magenta)">+</div>
+              <div class="ch-info">
+                <div class="ch-name" style="color:var(--color-magenta)">Open new channel</div>
+                <div class="ch-meta">Start a conversation with anyone</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAB is positioned relative to phone-frame via absolute -->
+          <button class="fab">+</button>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 3 — INCOMING (SCRAMBLED)
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-incoming" class="screen">
+        <div class="sc">
+
+          <header class="cyber-header">
+            <button class="header-back-btn" onclick="show('channels')">← Channels</button>
+            <span class="header-partner">ghost_signal</span>
+            <div style="width:72px"></div>
+          </header>
+
+          <div class="chat-stage">
+            <div class="stage-label magenta">⬡ Transmission Received</div>
+            <div class="sender-meta">From: <span class="hl">ghost_signal</span></div>
+
+            <div class="scramble-bubble">
+              <div class="scramble-text">
+                <span class="sc-char">X</span><span class="sc-char flicker">4</span><span class="sc-char">K</span><span class="sc-char flicker cyan-flash">j</span><span class="sc-char">9</span><span class="sc-char flicker">Q</span><span class="sc-char">z</span><span class="sc-char">!</span><span class="sc-char flicker">R</span><span class="sc-char">m</span><span class="sc-char">@</span><span class="sc-char flicker cyan-flash">2</span><span class="sc-char">W</span><span class="sc-char">p</span><span class="sc-char flicker">8</span><span class="sc-char">$</span><span class="sc-char">L</span><span class="sc-char flicker cyan-flash">n</span><span class="sc-char">6</span><span class="sc-char">%</span><span class="sc-char flicker">Y</span><span class="sc-char">s</span><span class="sc-char">^</span><span class="sc-char flicker">D</span><span class="sc-char cyan-flash">3</span><span class="sc-char flicker">*</span><span class="sc-char">H</span><span class="sc-char">v</span><span class="sc-char flicker cyan-flash">7</span><span class="sc-char">!</span><span class="sc-char">G</span><span class="sc-char flicker">q</span><span class="sc-char">1</span><span class="sc-char">+</span><span class="sc-char flicker">A</span><span class="sc-char">e</span><span class="sc-char">0</span><span class="sc-char flicker cyan-flash">b</span><span class="sc-char">F</span><span class="sc-char flicker">T</span><span class="sc-char">x</span><span class="sc-char">!</span><span class="sc-char flicker">@</span><span class="sc-char">9</span><span class="sc-char">M</span>
+              </div>
+            </div>
+
+            <div class="hint-text">Ready to decrypt?</div>
+
+            <div class="hold-pill" onclick="show('revealing')">
+              <div class="hold-dot"></div>
+              HOLD TO REVEAL
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 4 — REVEALING (DECRYPTION IN PROGRESS)
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-revealing" class="screen">
+        <div class="sc">
+
+          <header class="cyber-header">
+            <button class="header-back-btn" onclick="show('channels')">← Channels</button>
+            <span class="header-partner">ghost_signal</span>
+            <div style="width:72px"></div>
+          </header>
+
+          <div class="chat-stage">
+            <div class="stage-label cyan">⬡ Decrypting…</div>
+
+            <div class="reveal-bubble">
+              <div class="reveal-text">
+                <span class="rv-char locked">H</span><span class="rv-char locked">e</span><span class="rv-char locked">y</span><span class="rv-char">&nbsp;</span><span class="rv-char locked">—</span><span class="rv-char">&nbsp;</span><span class="rv-char locked">I</span><span class="rv-char">&nbsp;</span><span class="rv-char locked">k</span><span class="rv-char locked">e</span><span class="rv-char locked">p</span><span class="rv-char locked">t</span><span class="rv-char">&nbsp;</span><span class="rv-char">t</span><span class="rv-char">h</span><span class="rv-char">i</span><span class="rv-char">n</span><span class="rv-char">k</span><span class="rv-char">i</span><span class="rv-char">n</span><span class="rv-char">g</span><span class="rv-char">&nbsp;</span><span class="rv-char">a</span><span class="rv-char">b</span><span class="rv-char">o</span><span class="rv-char">u</span><span class="rv-char">t</span><span class="rv-char">&nbsp;</span><span class="rv-char">w</span><span class="rv-char">h</span><span class="rv-char">a</span><span class="rv-char">t</span><span class="rv-char">&nbsp;</span><span class="rv-char">y</span><span class="rv-char">o</span><span class="rv-char">u</span><span class="rv-char">&nbsp;</span><span class="rv-char">s</span><span class="rv-char">a</span><span class="rv-char">i</span><span class="rv-char">d</span><span class="rv-char">.</span>
+              </div>
+              <div class="decrypt-bar-wrap">
+                <div class="decrypt-bar"></div>
+              </div>
+              <div class="decrypt-status-text">Decrypting transmission… 58%</div>
+            </div>
+
+            <div class="hint-text" style="color:rgba(0,246,255,0.3)">Keep holding · Release to abort</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 5 — COMPOSE REPLY
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-compose" class="screen">
+        <div class="sc">
+
+          <header class="cyber-header">
+            <button class="header-back-btn" onclick="show('channels')">← Channels</button>
+            <span class="header-partner">ghost_signal</span>
+            <div style="width:72px"></div>
+          </header>
+
+          <div class="compose-wrap">
+            <div>
+              <div class="compose-heading">// Compose Transmission</div>
+              <div class="compose-sub">End-to-end encrypted before sending. Server sees ciphertext only.</div>
+            </div>
+
+            <div class="replied-banner">
+              <div class="replied-label">↩ They said (memory only)</div>
+              <div class="replied-quote">Hey — I kept thinking about what you said. Read 2 min ago.</div>
+            </div>
+
+            <textarea class="compose-field" placeholder="Type your transmission…">Did you mean the part about the signal drop, or something else entirely?</textarea>
+
+            <div class="compose-footer">
+              <div class="char-count">54 / 500</div>
+              <div class="compose-actions">
+                <button class="btn btn-ghost">SAVE DRAFT</button>
+                <button class="btn btn-cyan" onclick="show('awaiting')">TRANSMIT ⬡</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 6 — AWAITING REPLY
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-awaiting" class="screen">
+        <div class="sc">
+
+          <header class="cyber-header">
+            <button class="header-back-btn" onclick="show('channels')">← Channels</button>
+            <span class="header-partner">ghost_signal</span>
+            <div style="width:72px"></div>
+          </header>
+
+          <div class="awaiting-stage">
+            <div class="awaiting-glyph">⬡</div>
+
+            <div>
+              <div class="awaiting-title">Transmission Sent</div>
+              <div class="awaiting-sub" style="margin-top:8px">Waiting for <strong style="color:var(--color-cyan)">ghost_signal</strong> to decrypt and reply.</div>
+            </div>
+
+            <div class="ciphertext-preview">
+              <div class="cipher-label">Your encrypted message (stored on server)</div>
+              <div class="cipher-text">U2FsdGVkX1+Kj9zQ2Wp8mH4pRxNv8eLq3Yw+==<br>ZjF0dGVkX2+Km9aQ1Vn8LH3oSxMu9dKp2Xv==</div>
+            </div>
+
+            <div class="notify-hint">You'll be notified when they reply</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           SCREEN 7 — SYSTEM MANUAL
+           ════════════════════════════════════════════════════════ -->
+      <div id="screen-manual" class="screen">
+        <div class="sc">
+
+          <header class="cyber-header">
+            <button class="header-back-btn" onclick="show('channels')">← Channels</button>
+            <span class="header-logo">CRYPTEX</span>
+            <div style="width:72px"></div>
+          </header>
+
+          <div class="manual-body">
+            <div class="manual-title">System Manual</div>
+            <div class="manual-ver">v1.0 · CLASSIFIED · EYES ONLY</div>
+
+            <div class="man-section">
+              <div class="man-section-title">// 01. What Is This</div>
+              <div class="man-callout">
+                <strong>CRYPTEX</strong> is a turn-based, end-to-end encrypted messenger where each message exists exactly once. Read it — and it's gone forever. The server never sees your plaintext. Not even the admin can.
+              </div>
+            </div>
+
+            <div class="man-section">
+              <div class="man-section-title">// 02. How Encryption Works</div>
+              <div class="man-step">
+                <span class="step-num">01</span>
+                <span class="step-text">On first launch your device generates a unique <code>ECDH P-256</code> key pair. Your private key never leaves your browser.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">02</span>
+                <span class="step-text">When you open a channel, your browser derives a shared secret with your partner via <code>ECDH key exchange</code>. The server cannot compute this.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">03</span>
+                <span class="step-text">Messages are encrypted with <code>AES-256-GCM</code> in your browser before being sent. The server stores ciphertext + IV only.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">04</span>
+                <span class="step-text">After you decrypt a message it is permanently deleted from the server. No copy remains anywhere.</span>
+              </div>
+            </div>
+
+            <div class="man-section">
+              <div class="man-section-title">// 03. Turn Order</div>
+              <div class="man-step">
+                <span class="step-num">→</span>
+                <span class="step-text">One message is in play per channel at a time. You cannot send again until your partner has read and replied.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">→</span>
+                <span class="step-text"><strong style="color:var(--color-cyan)">YOUR TURN</strong> means a transmission is waiting for you, or you may compose the first message.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">→</span>
+                <span class="step-text">You'll receive a push notification when it's your turn. The channel lives until you both decide to close it.</span>
+              </div>
+            </div>
+
+            <div class="man-section">
+              <div class="man-section-title">// 04. First Setup</div>
+              <div class="man-step">
+                <span class="step-num">01</span>
+                <span class="step-text">Sign in with GitHub. A key pair is generated automatically on first visit.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">02</span>
+                <span class="step-text">Tap <strong style="color:var(--color-magenta)">+</strong> to open a new channel. Enter your partner's GitHub username.</span>
+              </div>
+              <div class="man-step">
+                <span class="step-num">03</span>
+                <span class="step-text">Enable notifications when prompted — this is how you'll know it's your turn.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .phone-frame -->
+  </div><!-- .phone-frame-wrap -->
+
+  <script>
+    function show(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.screen-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('screen-' + id).classList.add('active');
+      document.querySelectorAll('.screen-btn').forEach(b => {
+        if (b.getAttribute('onclick') === "show('" + id + "')") b.classList.add('active');
+      });
+    }
+  </script>
+
+</body>
+</html>

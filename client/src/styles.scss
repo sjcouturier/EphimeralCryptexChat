@@ -3,27 +3,40 @@
    ========================================================================= */
 
 :root {
-  /* Palette */
-  --color-bg: #0a0014;
-  --color-bg-secondary: #1a0f2e;
-  --color-cyan: #00f6ff;
-  --color-magenta: #ff00c8;
-  --color-purple: #8a2be2;
-  --color-white: #ffffff;
-  --color-gray: #9ca3af;
-  --color-terminal-green: #00ff66;
+  /* --- Colours --- */
+  --color-bg:           #0A0014;   /* main background                 */
+  --color-bg-card:      #0D0020;   /* card / panel background         */
+  --color-bg-input:     #110025;   /* textarea / input background     */
+  --color-cyan:         #00F6FF;   /* primary accent (reveal, badges) */
+  --color-magenta:      #FF00C8;   /* secondary accent (scramble, FAB)*/
+  --color-purple:       #8A2BE2;   /* tertiary (waiting, manual)      */
+  --color-purple-dim:   #2A0D4E;   /* dark purple fill                */
+  --color-white:        #E8E8FF;   /* body text                       */
+  --color-gray:         #6B7280;   /* muted / secondary text          */
+  --color-gray-dim:     #1C0A30;   /* subtle section dividers         */
 
-  /* Glows */
-  --glow-cyan: 0 0 12px #00f6ff;
-  --glow-magenta: 0 0 12px #ff00c8;
-  --glow-green: 0 0 10px #00ff66;
+  /* --- Glow shadows --- */
+  --glow-cyan:    0 0 8px #00F6FF, 0 0 24px rgba(0,246,255,0.35);
+  --glow-magenta: 0 0 8px #FF00C8, 0 0 24px rgba(255,0,200,0.35);
+  --glow-purple:  0 0 8px #8A2BE2, 0 0 24px rgba(138,43,226,0.35);
 
-  /* Typography */
-  --font-display: 'Orbitron', sans-serif;
-  --font-body: 'Rajdhani', sans-serif;
-  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  /* --- Typography --- */
+  --font-display: 'Orbitron', monospace;
+  --font-body:    'Rajdhani', sans-serif;
+  --font-mono:    'JetBrains Mono', 'IBM Plex Mono', monospace;
 
-  /* Animation timing */
+  /* --- Borders --- */
+  --border-cyan:    1px solid rgba(0,246,255,0.35);
+  --border-magenta: 1px solid rgba(255,0,200,0.35);
+  --border-purple:  1px solid rgba(138,43,226,0.35);
+  --border-dim:     1px solid rgba(138,43,226,0.15);
+
+  /* --- Shape --- */
+  --radius:    4px;
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+
+  /* --- Animation timing --- */
   --reveal-duration: 400ms;
   --read-duration: 3000ms;
   --scramble-duration: 400ms;
@@ -79,11 +92,11 @@ a {
   font-size: 0.85rem;
   color: var(--color-cyan);
   background: transparent;
-  border: 1px solid var(--color-cyan);
-  border-radius: 4px;
+  border: var(--border-cyan);
+  border-radius: var(--radius);
   padding: 0.85rem 1.4rem;
   cursor: pointer;
-  box-shadow: var(--glow-cyan);
+  box-shadow: 0 0 12px rgba(0,246,255,0.15), inset 0 0 10px rgba(0,246,255,0.04);
   transition:
     background 160ms ease,
     box-shadow 160ms ease,
@@ -92,8 +105,8 @@ a {
 
 .cyber-btn:hover,
 .cyber-btn:focus-visible {
-  background: rgba(0, 246, 255, 0.12);
-  box-shadow: 0 0 22px var(--color-cyan);
+  background: rgba(0, 246, 255, 0.09);
+  box-shadow: var(--glow-cyan), inset 0 0 16px rgba(0,246,255,0.08);
   outline: none;
 }
 
@@ -104,13 +117,13 @@ a {
 .cyber-btn--magenta {
   color: var(--color-magenta);
   border-color: var(--color-magenta);
-  box-shadow: var(--glow-magenta);
+  box-shadow: 0 0 12px rgba(255,0,200,0.15), inset 0 0 10px rgba(255,0,200,0.04);
 }
 
 .cyber-btn--magenta:hover,
 .cyber-btn--magenta:focus-visible {
-  background: rgba(255, 0, 200, 0.12);
-  box-shadow: 0 0 22px var(--color-magenta);
+  background: rgba(255, 0, 200, 0.09);
+  box-shadow: var(--glow-magenta), inset 0 0 16px rgba(255,0,200,0.08);
 }
 
 .cyber-btn:disabled {
@@ -119,27 +132,82 @@ a {
   box-shadow: none;
 }
 
+/* ---- Button variants (mockup) --------------------------------------------- */
+.btn {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 12px 22px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.btn-cyan {
+  color: var(--color-cyan);
+  background: transparent;
+  border: var(--border-cyan);
+  box-shadow: 0 0 12px rgba(0,246,255,0.15), inset 0 0 10px rgba(0,246,255,0.04);
+}
+
+.btn-cyan:hover {
+  background: rgba(0,246,255,0.09);
+  box-shadow: var(--glow-cyan), inset 0 0 16px rgba(0,246,255,0.08);
+}
+
+.btn-magenta {
+  color: var(--color-magenta);
+  background: transparent;
+  border: var(--border-magenta);
+  box-shadow: 0 0 12px rgba(255,0,200,0.15), inset 0 0 10px rgba(255,0,200,0.04);
+}
+
+.btn-magenta:hover {
+  background: rgba(255,0,200,0.09);
+  box-shadow: var(--glow-magenta), inset 0 0 16px rgba(255,0,200,0.08);
+}
+
+.btn-ghost {
+  color: var(--color-gray);
+  background: transparent;
+  border: 1px solid rgba(107,114,128,0.25);
+}
+
 /* ---- Inputs -------------------------------------------------------------- */
 .cyber-input {
   font-family: var(--font-body);
   font-size: 1rem;
   color: var(--color-white);
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid var(--color-cyan);
-  padding: 0.6rem 0.2rem;
+  background: var(--color-bg-input);
+  border: var(--border-cyan);
+  border-radius: var(--radius-lg);
+  padding: 14px;
   width: 100%;
   outline: none;
-  box-shadow: 0 2px 8px -4px var(--color-cyan);
+  caret-color: var(--color-cyan);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: inset 0 0 14px rgba(0,246,255,0.04);
 }
 
 .cyber-input::placeholder {
-  color: var(--color-gray);
+  color: rgba(232,232,255,0.18);
 }
 
 .cyber-input:focus {
-  border-bottom-color: var(--color-magenta);
-  box-shadow: 0 2px 12px -4px var(--color-magenta);
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 18px rgba(0,246,255,0.1), inset 0 0 12px rgba(0,246,255,0.05);
+}
+
+textarea.cyber-input {
+  resize: none;
+  min-height: 140px;
 }
 
 /* ---- Range sliders ------------------------------------------------------- */
@@ -241,4 +309,46 @@ input[type='range']::-moz-range-thumb {
     opacity: 0.55;
     text-shadow: 0 0 4px var(--color-cyan);
   }
+}
+
+/* ---- Mockup animations ---------------------------------------------------- */
+@keyframes titlePulse {
+  0%,100% { text-shadow: 0 0 10px #00F6FF, 0 0 28px rgba(0,246,255,0.4); }
+  50%     { text-shadow: 0 0 20px #00F6FF, 0 0 55px rgba(0,246,255,0.6), 0 0 90px rgba(0,246,255,0.15); }
+}
+
+@keyframes badgePulse {
+  0%,100% { box-shadow: 0 0 6px rgba(0,246,255,0.15); }
+  50%     { box-shadow: 0 0 14px rgba(0,246,255,0.35), 0 0 26px rgba(0,246,255,0.1); }
+}
+
+@keyframes gridDrift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(36px, 36px); }
+}
+
+@keyframes scFlicker {
+  0%   { opacity: 1;   transform: translateY(0);    }
+  50%  { opacity: 0.6; transform: translateY(-1px); }
+  100% { opacity: 1;   transform: translateY(1px);  }
+}
+
+@keyframes holdPulse {
+  0%,100% { box-shadow: 0 0 10px rgba(0,246,255,0.1); }
+  50%     { box-shadow: 0 0 22px rgba(0,246,255,0.28), 0 0 40px rgba(0,246,255,0.08); }
+}
+
+@keyframes dotBlink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.25; }
+}
+
+@keyframes charLockIn {
+  0%   { transform: scale(1.5) translateY(-3px); color: var(--color-cyan); }
+  100% { transform: scale(1)   translateY(0);    color: var(--color-white); }
+}
+
+@keyframes glyphBreath {
+  0%,100% { box-shadow: var(--glow-purple); }
+  50%     { box-shadow: 0 0 28px rgba(138,43,226,0.55), 0 0 55px rgba(138,43,226,0.18); }
 }
