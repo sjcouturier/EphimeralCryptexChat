@@ -5,7 +5,7 @@
  * When deploying the SPA to GitHub Pages, set PRODUCTION_API_ORIGIN to your
  * DigitalOcean Droplet backend URL.
  */
-const PRODUCTION_API_ORIGIN = 'http://157.230.177.68';
+const PRODUCTION_API_ORIGIN = 'https://ephemeralcryptex.duckdns.org';
 const DEV_API_ORIGIN = 'http://localhost:5058';
 
 function resolveApiOrigin(): string {
