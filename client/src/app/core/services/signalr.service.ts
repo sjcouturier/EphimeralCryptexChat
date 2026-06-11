@@ -34,12 +34,15 @@ export class SignalrService {
   /** Builds (once) and starts the hub connection, wiring up all event listeners. */
   async startConnection(): Promise<void> {
     if (this.connection && this.connection.state === HubConnectionState.Connected) {
+      console.log('[SignalR] Already connected');
       return;
     }
     if (this.startPromise) {
+      console.log('[SignalR] Connection in progress, waiting...');
       return this.startPromise;
     }
 
+    console.log('[SignalR] Starting connection to', APP_CONFIG.hubUrl);
     this.connection = new HubConnectionBuilder()
       .withUrl(APP_CONFIG.hubUrl, {
         accessTokenFactory: () => this.auth.getToken() ?? '',
@@ -50,14 +53,27 @@ export class SignalrService {
 
     this.registerHandlers(this.connection);
 
-    this.connection.onreconnecting(() => this.syncState());
-    this.connection.onreconnected(() => this.syncState());
-    this.connection.onclose(() => this.syncState());
+    this.connection.onreconnecting(() => {
+      console.log('[SignalR] Reconnecting...');
+      this.syncState();
+    });
+    this.connection.onreconnected(() => {
+      console.log('[SignalR] Reconnected');
+      this.syncState();
+    });
+    this.connection.onclose(() => {
+      console.log('[SignalR] Connection closed');
+      this.syncState();
+    });
 
     this.startPromise = this.connection
       .start()
-      .then(() => this.syncState())
+      .then(() => {
+        console.log('[SignalR] Connected successfully');
+        this.syncState();
+      })
       .catch((err) => {
+        console.error('[SignalR] Connection failed:', err);
         this.syncState();
         this.startPromise = undefined;
         throw err;
@@ -99,15 +115,26 @@ export class SignalrService {
   }
 
   private registerHandlers(connection: HubConnection): void {
-    connection.on('ReceiveMessage', (message: Message) => this.onReceiveMessage$.next(message));
-    connection.on('MessageRead', (messageId: number, conversationId: number) =>
-      this.onMessageRead$.next({ messageId, conversationId }),
-    );
-    connection.on('ConversationUpdated', (conversation: Conversation) =>
-      this.onConversationUpdated$.next(conversation),
-    );
-    connection.on('UserOnline', (userId: number) => this.onUserOnline$.next(userId));
-    connection.on('UserOffline', (userId: number) => this.onUserOffline$.next(userId));
+    connection.on('ReceiveMessage', (message: Message) => {
+      console.log('[SignalR] ReceiveMessage:', message);
+      this.onReceiveMessage$.next(message);
+    });
+    connection.on('MessageRead', (messageId: number, conversationId: number) => {
+      console.log('[SignalR] MessageRead:', messageId, conversationId);
+      this.onMessageRead$.next({ messageId, conversationId });
+    });
+    connection.on('ConversationUpdated', (conversation: Conversation) => {
+      console.log('[SignalR] ConversationUpdated:', conversation);
+      this.onConversationUpdated$.next(conversation);
+    });
+    connection.on('UserOnline', (userId: number) => {
+      console.log('[SignalR] UserOnline:', userId);
+      this.onUserOnline$.next(userId);
+    });
+    connection.on('UserOffline', (userId: number) => {
+      console.log('[SignalR] UserOffline:', userId);
+      this.onUserOffline$.next(userId);
+    });
   }
 
   private async ensureConnected(): Promise<void> {
